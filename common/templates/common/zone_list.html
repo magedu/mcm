@@ -1,0 +1,43 @@
+{% extends 'common/layout.html' %}
+{% block title %}大区列表{% endblock %}
+{% load mcm %}
+
+{% block main %}
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <h3 class="col-3">大区列表</h3>
+                <div class="col-9 float-right">
+                    {% include 'components/filter.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">供应商</th>
+                    <th scope="col">大区</th>
+                    <th scope="col">名称</th>
+                    <th scope="col">说明</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for zone in page_obj %}
+                    <tr>
+                        <th scope="row">{{ zone.region.provider.name }}</th>
+                        <td>{{ zone.region.display }}</td>
+                        <td>{{ zone.name }}</td>
+                        <td>{{ zone.display }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% pagination %}
+        <div>
+
+        </div>
+    </div>
+
+{% endblock %}

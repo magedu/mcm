@@ -1,0 +1,15 @@
+{% load mcm %}
+{% for hidden in form.hidden_fields %}
+    {{ hidden }}
+{% endfor %}
+{% for field in form.visible_fields %}
+    {% with widget=field.field.widget %}
+        {% if widget|isinstance:'django.forms.widgets.TextInput' %}
+            {% include 'forms/groupd/input.html' with field=field %}
+        {% elif widget|isinstance:'django.forms.widgets.NumberInput' %}
+            {% include 'forms/groupd/input.html' with field=field %}
+        {% elif widget|isinstance:'django.forms.widgets.Select' %}
+            {% include 'forms/groupd/select.html' with field=field %}
+        {% endif %}
+    {% endwith %}
+{% endfor %}

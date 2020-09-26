@@ -1,0 +1,28 @@
+<div class="form-group">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    <select name="{{ field.name }}" class="form-control" id="{{ field.id_for_label }}" aria-describedby="{{ field.name }}_help" {% include 'forms/attrs.html' with widget=widget %}>
+        {% for value, label in field.field.choices %}
+            {% if field.value.value == value %}
+                <option value="{{ value }}" selected>{{ label }}</option>
+            {% elif field.initial == value %}
+                <option value="{{ value }}" selected>{{ label }}</option>
+            {% else %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    {% if field.help_text %}
+        <small id="{{ field.name }}_help" class="form-text text-muted">
+            {{ field.help_text }}
+        </small>
+    {% endif %}
+    {% if field.errors %}
+        <div class="valid-feedback">
+            <ol>
+                {% for error in field.errors %}
+                    <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ol>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,60 @@
+{% extends 'common/layout.html' %}
+{% block title %}大区列表{% endblock %}
+{% load mcm %}
+
+{% block main %}
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <h3 class="col">大区列表</h3>
+                <div class="col float-right">
+                    <form class="float-right form-inline" method="get">
+                        <label class="sr-only" for="id_provider">供应商</label>
+                        <select class="form-control mb-2 mr-sm-2" name="provider" id="id_provider">
+                            <option value="">选择一个供应商</option>
+                            {% for provider in providers %}
+                                {% if provider.id == provider_filter_id %}
+                                    <option value="{{ provider.id }}" selected>{{ provider.name }}</option>
+                                {% else %}
+                                    <option value="{{ provider.id }}">{{ provider.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <label class="sr-only" for="id_filter">过滤</label>
+                        <input class="form-control mb-2 mr-sm-2" id="id_filter" type="text" name="fl"
+                               value="{{ fl|default:'' }}" placeholder="过滤条件">
+                        <input type="submit" class="btn btn-primary mb-2" value="过滤">
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">供应商</th>
+                    <th scope="col">名称</th>
+                    <th scope="col">说明</th>
+                    <th scope="col">同步可用区</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for region in page_obj %}
+                    <tr>
+                        <th scope="row">{{ region.provider.name }}</th>
+                        <td>{{ region.name }}</td>
+                        <td>{{ region.display }}</td>
+                        <td><a href="{% url 'common:zone-sync' region.id %}">同步</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% pagination %}
+        <div>
+
+        </div>
+    </div>
+
+{% endblock %}

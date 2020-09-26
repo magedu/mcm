@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "mcm"
+version = "0.1.0"
+description = ""
+authors = ["李学明 <comynli@lieluobo.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+django = "3.1.1"
+mysqlclient = "^2.0.1"
+ldap3 = "^2.8.1"
+tencentcloud-sdk-python = "^3.0.260"
+
+[tool.poetry.dev-dependencies]
+ipython = "^7.18.1"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

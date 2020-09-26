@@ -1,0 +1,31 @@
+{% load mcm %}
+{% if paginator.num_pages > 1 %}
+    <div class="card-footer">
+        <ul class="pagination" style="margin-block-end: 0">
+            <li class="page-item {% if 1 == page_obj.number %}disabled{% endif %}">
+                <a class="page-link" href="{% page_url 1 %}">首页</a>
+            </li>
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="{% page_url page_obj.previous_page_number %}">上一页</a>
+                </li>
+            {% endif %}
+            {% for num in paginator.page_range %}
+                <li class="page-item {% if num == page_obj.number %}disabled{% endif %}">
+                    <a class="page-link" href="{% page_url num %}">{{ num }}</a>
+                </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                       href="{% page_url page_obj.next_page_number %}">下一页</a>
+                </li>
+            {% endif %}
+            <li class="page-item {% if paginator.num_pages == page_obj.number %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{% page_url paginator.num_pages %}">末页</a>
+            </li>
+        </ul>
+    </div>
+{% endif %}

@@ -1,0 +1,86 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'common.css' %}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-dark navbar-expand-lg sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/">多云管理平台</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
+            data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <nav class="navbar-nav nav-pills w-100 px-3">
+        {% if perms.provider %}
+            <a class="nav-item nav-link active" href="{% url 'common:index' %}">提供商</a>
+        {% endif %}
+        {% if perms.network or perms.subnet %}
+            <a class="nav-item nav-link" href="{% url 'common:index' %}">网络</a>
+        {% endif %}
+        {% if perms.vm %}
+            <a class="nav-item nav-link" href="{% url 'common:index' %}">主机</a>
+        {% endif %}
+    </nav>
+
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            {% if user.is_authenticated %}
+                <a class="nav-link" href="{% url 'account:signout' %}">退出</a>
+            {% else %}
+                <a class="nav-link" href="{% url 'account:signin' %}">登录</a>
+            {% endif %}
+
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            {% block sidebar %}
+            {% endblock %}
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            {% include 'message.html' %}
+
+            {% block main %}{% endblock %}
+        </main>
+    </div>
+</div>
+<script src="{% static 'jquery.slim.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'feather.min.js' %}"></script>
+<script src="{% static 'common.js' %}"></script>
+{% block script %}{% endblock %}
+</body>
+</html>

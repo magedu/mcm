@@ -1,0 +1,29 @@
+<form class="float-right form-inline" method="get">
+    <label class="sr-only" for="id_provider">供应商</label>
+    <select class="form-control mb-2 mr-sm-2" name="provider" id="id_provider">
+        <option value="">选择一个供应商</option>
+        {% for provider in filter.providers %}
+            {% if provider == filter.provider %}
+                <option value="{{ provider.id }}" selected>{{ provider.name }}</option>
+            {% else %}
+                <option value="{{ provider.id }}">{{ provider.name }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <label class="sr-only" for="id_region">大区</label>
+    <select class="form-control mb-2 mr-sm-2" name="region" id="id_region">
+        <option value="">选择一个区域</option>
+        {% for region in filter.regions %}
+            {% if region == filter.region %}
+                <option value="{{ region.id }}" selected>{{ region.display }}
+                </option>
+            {% else %}
+                <option value="{{ region.id }}">{{ region.display }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <label class="sr-only" for="id_kw">关键字</label>
+    <input class="form-control mb-2 mr-sm-2" id="id_kw" type="text" name="kw"
+           value="{{ filter.kw|default:'' }}" placeholder="过滤条件">
+    <input type="submit" class="btn btn-primary mb-2" value="过滤">
+</form>

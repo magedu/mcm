@@ -1,0 +1,13 @@
+{% load mcm %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {% bootstrap_alert_class_tag message.tags %} alert-dismissible" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+
+{% endif %}
