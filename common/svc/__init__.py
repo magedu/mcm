@@ -1,6 +1,4 @@
-from abc import ABC
-from ..mixins import ServiceMixIn, SyncServiceMixIn
-from ..models import Provider, Region, Zone
+from common.svc.mixins import ServiceMixIn
 
 
 class Services:  # 存储实现类
@@ -24,22 +22,3 @@ class Services:  # 存储实现类
     def get(cls, impl_class, provider, region: str = '', *args, **kwargs):
         impl_class = cls.class_map[cls._key(provider.sdk, impl_class.service_type)]
         return impl_class(provider, region, *args, **kwargs)
-
-
-class RegionService(ServiceMixIn, SyncServiceMixIn, ABC):
-    service_type = 'Region'
-    model = Region
-    identities = ['provider', 'name']
-
-    def __init__(self, provider: Provider, *args, **kwargs):
-        self._provider = provider
-
-
-class ZoneService(ServiceMixIn, SyncServiceMixIn, ABC):
-    service_type = 'Zone'
-    model = Zone
-    identities = ['region', 'name']
-
-    def __init__(self, provider: Provider, region: str, *args, **kwargs):
-        self._provider = provider
-        self.region = region
