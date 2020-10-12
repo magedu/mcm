@@ -10,9 +10,9 @@ class ServiceMixIn:  # 用于提供service_type和sdk_type
     sdk_type = None
 
     @property
-    def provider(self):  # 由于所有API调用,都需要provider 所以这里也提供都需要provider
-        if hasattr(self, '_provider'):  # 魔法
-            return self._provider
+    def account(self):  # 由于所有API调用,都需要provider 所以这里也提供都需要provider
+        if hasattr(self, '_account'):  # 魔法
+            return self._account
         raise NotImplementedError()
 
 

@@ -19,6 +19,6 @@ class Services:  # 存储实现类
         return impl_class
 
     @classmethod
-    def get(cls, impl_class, provider, region: str = '', *args, **kwargs):
-        impl_class = cls.class_map[cls._key(provider.sdk, impl_class.service_type)]
-        return impl_class(provider, region, *args, **kwargs)
+    def get(cls, impl_class, account, region: str = '', *args, **kwargs):
+        impl_class = cls.class_map[cls._key(account.provider.sdk, impl_class.service_type)]
+        return impl_class(account, region, *args, **kwargs)

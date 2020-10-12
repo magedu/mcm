@@ -8,13 +8,15 @@ from ...models import Region
 
 @Services.register
 class TencentCloudRegionService(TencentCloudQueryServiceMixIn, RegionService):
-    mapping = {'provider': 'provider', 'name': 'Region', 'display': 'RegionName'}
+    mapping = {'provider': 'get_provider', 'name': 'Region', 'display': 'RegionName'}
     request_class = models.DescribeRegionsRequest
-    pageable = False
 
     @property
     def client(self):
         return cvm_client.CvmClient(self.credential, '')
+
+    def get_provider(self):
+        return self.account.provider
 
 
 @Services.register
@@ -27,4 +29,4 @@ class TencentCloudZoneService(TencentCloudQueryServiceMixIn, ZoneService):
         return cvm_client.CvmClient(self.credential, self.region)
 
     def get_region(self):
-        return Region.objects.get(provider=self.provider, name=self.region)
+        return Region.objects.get(provider=self.account.provider, name=self.region)

@@ -3,7 +3,8 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from . import models
-from .svc import Services, RegionService, ZoneService
+from .svc import Services
+from .svc.impl.base import RegionService, ZoneService
 
 
 class FilteringListView(generic.ListView):

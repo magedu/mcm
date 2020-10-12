@@ -1,5 +1,5 @@
 from abc import ABC
-from common.models import Provider, Region, Zone
+from common.models import ProviderAccount, Region, Zone
 from common.svc.mixins import ServiceMixIn, SyncServiceMixIn
 
 
@@ -8,8 +8,8 @@ class RegionService(ServiceMixIn, SyncServiceMixIn, ABC):
     model = Region
     identities = ['provider', 'name']
 
-    def __init__(self, provider: Provider, *args, **kwargs):
-        self._provider = provider
+    def __init__(self, account: ProviderAccount, *args, **kwargs):
+        self._account = account
 
 
 class ZoneService(ServiceMixIn, SyncServiceMixIn, ABC):
@@ -17,6 +17,6 @@ class ZoneService(ServiceMixIn, SyncServiceMixIn, ABC):
     model = Zone
     identities = ['region', 'name']
 
-    def __init__(self, provider: Provider, region: str, *args, **kwargs):
-        self._provider = provider
+    def __init__(self, account: ProviderAccount, region: str, *args, **kwargs):
+        self._account = account
         self.region = region

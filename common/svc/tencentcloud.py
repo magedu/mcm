@@ -9,7 +9,7 @@ class TencentCloudMixIn(ServiceMixIn):  # 固化SDK type， 同时提供credenti
 
     @property
     def credential(self):
-        return credential.Credential(self.provider.access_key, self.provider.access_secret)
+        return credential.Credential(self.account.access_key, self.account.access_secret)
 
     @property
     def client(self):
