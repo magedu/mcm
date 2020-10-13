@@ -10,6 +10,8 @@
             {% include 'forms/groupd/input.html' with field=field %}
         {% elif widget|isinstance:'django.forms.widgets.Select' %}
             {% include 'forms/groupd/select.html' with field=field %}
+        {% elif widget|isinstance:'django.forms.widgets.CheckboxInput' %}
+            {% include 'forms/groupd/checkbox.html' %}
         {% endif %}
     {% endwith %}
 {% endfor %}

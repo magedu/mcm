@@ -1,0 +1,50 @@
+{% extends 'common/layout.html' %}
+{% load mcm %}
+
+{% block title %}供应商列表{% endblock %}
+
+{% block main %}
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <h3 class="col">API账号列表</h3>
+                <div class="col-1 float-right">
+                    <a class="btn btn-primary" type="button" href="{% url 'common:provider-account-create' %}">新增</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">名称</th>
+                    <th scope="col">Access Key</th>
+                    <th scope="col">提供商</th>
+                    <th scope="col">可用</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for account in page_obj %}
+                    <tr>
+                        <th scope="row">{{ account.name }}</th>
+                        <td>{{ account.access_key }}</td>
+                        <td>{{ account.provider.name }}</td>
+                        <td>
+                            <input type="checkbox" data-toggle="toggle" class="region-available-toggle"
+                                   data-on="是" data-off="否" data-onstyle="success" data-offstyle="danger"
+                                   {% if account.available %}checked{% endif %} disabled>
+                        </td>
+                        <td><a href="{% url 'common:provider-account-update' account.id %}">编辑</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% pagination %}
+        <div>
+
+        </div>
+    </div>
+
+{% endblock %}

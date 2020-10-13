@@ -5,11 +5,30 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from . import models
 from .svc import Services
 from .svc.impl.base import RegionService, ZoneService
+from .shortcuts import boolean
+
+
+class CreateProviderAccountView(generic.CreateView):
+    model = models.ProviderAccount
+    fields = '__all__'
+    success_url = reverse_lazy('common:provider-account-list')
+
+
+class UpdateProviderAccountView(generic.UpdateView):
+    model = models.ProviderAccount
+    fields = '__all__'
+    success_url = reverse_lazy('common:provider-account-list')
+
+
+class ListProviderAccountView(generic.ListView):
+    model = models.ProviderAccount
+    paginate_by = 20
 
 
 class FilteringListView(generic.ListView):
     filter_fields = ['name']
     extra_context = {}
+    with_unavailable_regions = False
 
     class Filter:
         def __init__(self, view):
@@ -31,6 +50,8 @@ class FilteringListView(generic.ListView):
             try:
                 self._provider = models.Provider.objects.get(pk=pk)
                 self.regions = models.Region.objects.filter(provider=self.provider)
+                if not getattr(self.view, 'with_unavailable_regions', False):
+                    self.regions = self.regions.filter(available=True)
             except models.Provider.DoesNotExist:
                 pass
 
@@ -80,45 +101,6 @@ class FilteringListView(generic.ListView):
         return queryset
 
 
-# Create your views here.
-class CreateProviderView(PermissionRequiredMixin, generic.CreateView):
-    model = models.Provider
-    fields = '__all__'
-    permission_required = 'common.add_provider'
-    success_url = reverse_lazy('common:provider-list')
-
-
-class UpdateProviderView(PermissionRequiredMixin, generic.UpdateView):
-    model = models.Provider
-    fields = '__all__'
-    permission_required = 'common.change_provider'
-    success_url = reverse_lazy('common:provider-list')
-
-
-class DeleteProviderView(PermissionRequiredMixin, generic.DeleteView):
-    model = models.Provider
-    permission_required = 'common.delete_provider'
-    success_url = reverse_lazy('common:provider-list')
-
-    def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
-
-
-class ListProviderView(PermissionRequiredMixin, generic.ListView):
-    model = models.Provider
-    permission_required = 'common.view_provider'
-    paginate_by = 20
-    extra_context = {}
-
-    def get_queryset(self):
-        queryset = self.model.objects.all()
-        kw = self.request.GET.get('fl')
-        if kw:
-            self.extra_context['fl'] = kw
-            queryset = queryset.filter(name__icontains=kw)
-        return queryset
-
-
 class SyncRegionView(PermissionRequiredMixin, generic.RedirectView):
     permission_required = ['common.add_region', 'common.change_region']
     url = reverse_lazy('common:region-list')
@@ -134,9 +116,8 @@ class SyncRegionView(PermissionRequiredMixin, generic.RedirectView):
         return super().get(request, *args, **kwargs)
 
 
-class ListRegionView(PermissionRequiredMixin, generic.ListView):
+class ListRegionView(generic.ListView):
     model = models.Region
-    permission_required = 'common.view_region'
     paginate_by = 10
     extra_context = {'providers': models.Provider.objects.all()}
 
@@ -147,28 +128,50 @@ class ListRegionView(PermissionRequiredMixin, generic.ListView):
             self.extra_context['provider_filter_id'] = int(provider)
             queryset = queryset.filter(provider__id=int(provider))
         kw = self.request.GET.get('fl')
+        self.extra_context['fl'] = kw
         if kw:
-            self.extra_context['fl'] = kw
             queryset = queryset.filter(Q(name__icontains=kw) | Q(display__icontains=kw))
         return queryset
 
 
-class ListZoneView(PermissionRequiredMixin, FilteringListView):
+class ToggleRegionAvailableView(generic.RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        url = self.request.GET.get('next')
+        if url:
+            return url
+        return reverse_lazy('common:region-list')
+
+    def get(self, request, *args, **kwargs):
+        try:
+            region = models.Region.objects.get(pk=kwargs.get('pk'))
+            region.available = boolean(self.request.GET.get('available'), region.available)
+            region.save()
+        except models.Provider.DoesNotExist:
+            pass
+
+        return super().get(request, *args, **kwargs)
+
+
+class ListZoneView(FilteringListView):
     model = models.Zone
-    permission_required = 'common.view_zone'
     paginate_by = 10
     filter_fields = ['name', 'display']
 
 
-class SyncZoneView(PermissionRequiredMixin, generic.RedirectView):
-    permission_required = ['common.add_zone', 'common.change_zone']
-    url = reverse_lazy('common:zone-list')
+class ToggleZoneAvailableView(generic.RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        url = self.request.GET.get('next')
+        if url:
+            return url
+        return reverse_lazy('common:zone-list')
 
     def get(self, request, *args, **kwargs):
         try:
-            region = models.Region.objects.get(pk=kwargs.get('region'))
-            service = Services.get(ZoneService, provider=region.provider, region=region.name)
-            service.sync_to_model()
+            zone = models.Zone.objects.get(pk=kwargs.get('pk'))
+            zone.available = boolean(self.request.GET.get('available'), zone.available)
+            zone.save()
         except models.Provider.DoesNotExist:
             pass
 

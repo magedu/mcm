@@ -1,4 +1,5 @@
 {% load static %}
+{% load mcm %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -30,6 +31,7 @@
     </style>
     <!-- Custom styles for this template -->
     <link href="{% static 'common.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap4-toggle.min.css' %}" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-dark navbar-expand-lg sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -40,15 +42,10 @@
     </button>
 
     <nav class="navbar-nav nav-pills w-100 px-3">
-        {% if perms.provider %}
-            <a class="nav-item nav-link active" href="{% url 'common:index' %}">提供商</a>
-        {% endif %}
-        {% if perms.network or perms.subnet %}
-            <a class="nav-item nav-link" href="{% url 'common:index' %}">网络</a>
-        {% endif %}
-        {% if perms.vm %}
-            <a class="nav-item nav-link" href="{% url 'common:index' %}">主机</a>
-        {% endif %}
+        <a class="nav-item nav-link {% is_active 'common:' %}" href="{% url 'common:index' %}">管理</a>
+        <a class="nav-item nav-link" href="{% url 'common:index' %}">网络</a>
+        <a class="nav-item nav-link" href="{% url 'common:index' %}">主机</a>
+
     </nav>
 
     <ul class="navbar-nav px-3">
@@ -66,8 +63,10 @@
 <div class="container-fluid">
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            {% block sidebar %}
-            {% endblock %}
+            <div class="sidebar-sticky pt-3">
+                {% block sidebar %}
+                {% endblock %}
+            </div>
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
@@ -80,6 +79,7 @@
 <script src="{% static 'jquery.slim.min.js' %}"></script>
 <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'feather.min.js' %}"></script>
+<script src="{% static 'bootstrap4-toggle.min.js' %}"></script>
 <script src="{% static 'common.js' %}"></script>
 {% block script %}{% endblock %}
 </body>

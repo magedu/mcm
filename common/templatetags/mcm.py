@@ -67,3 +67,11 @@ def page_url(context, page: int):
 @register.inclusion_tag(filename='components/pagination.html', takes_context=True)
 def pagination(context):
     return context
+
+
+@register.simple_tag(takes_context=True)
+def is_active(context, prefix):
+    request: HttpRequest = context['request']
+    if request.resolver_match.view_name.startswith(prefix):
+        return 'active'
+    return ''

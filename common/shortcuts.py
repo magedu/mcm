@@ -1,3 +1,4 @@
+import json
 from django.db.models import Model
 
 
@@ -19,3 +20,9 @@ def remove_suffix(s: str, suffix: str):
 
 def remove_prefix(s: str, prefix: str):
     return s.replace(prefix, '', 1)
+
+
+def boolean(s, default: bool):
+    if s:
+        return json.loads(s)
+    return default

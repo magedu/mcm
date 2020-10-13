@@ -18,7 +18,10 @@ class Provider(BaseModel):
         ALIYUN = 'Aliyun', _('Alibaba Cloud')
 
     name = models.CharField(max_length=64, unique=True)
-    sdk = models.CharField(max_length=32, choices=SDKChoices.choices, null=False, default=SDKChoices.TENCENT_CLOUD)
+    sdk = models.CharField(max_length=32, choices=SDKChoices.choices,
+                           null=False,
+                           default=SDKChoices.TENCENT_CLOUD,
+                           unique=True)
 
     def __str__(self):
         return self.name

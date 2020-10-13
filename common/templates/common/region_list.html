@@ -36,7 +36,7 @@
                     <th scope="col">供应商</th>
                     <th scope="col">名称</th>
                     <th scope="col">说明</th>
-                    <th scope="col">同步可用区</th>
+                    <th scope="col">可用</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -45,7 +45,12 @@
                         <th scope="row">{{ region.provider.name }}</th>
                         <td>{{ region.name }}</td>
                         <td>{{ region.display }}</td>
-                        <td><a href="{% url 'common:zone-sync' region.id %}">同步</a></td>
+                        <td>
+                            <input type="checkbox" data-toggle="toggle" class="region-available-toggle"
+                                   data-on="是" data-off="否" data-onstyle="success" data-offstyle="danger"
+                                   data-url="{% url 'common:region-toggle' region.id %}"
+                                   {% if region.available %}checked{% endif %}>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -56,5 +61,19 @@
 
         </div>
     </div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        $('.region-available-toggle').change(function () {
+            var url = new URL($(this).data('url'), window.location.origin);
+            var params = url.searchParams;
+            params.set('next', window.location.href);
+            params.set('available', $(this).is(':checked'));
+            url.searchParams = params;
+            window.location.href = url.href;
+        })
+    </script>
 
 {% endblock %}
