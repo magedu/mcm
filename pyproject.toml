@@ -10,6 +10,8 @@ django = "3.1.1"
 mysqlclient = "^2.0.1"
 ldap3 = "^2.8.1"
 tencentcloud-sdk-python = "^3.0.260"
+celery = {version = "4.4.7", extras = ["redis"]}
+django-celery-beat = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 ipython = "^7.18.1"

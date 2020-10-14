@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_celery_beat',
     'account.apps.AccountConfig',
     'common.apps.CommonConfig',
     # 'network.apps.NetworkConfig',
@@ -138,3 +139,6 @@ ACCOUNT_AUTH_LDAP = {
 }
 
 AUTHENTICATION_BACKENDS = ['account.auth.LDAPBackend', 'django.contrib.auth.backends.ModelBackend']
+
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
