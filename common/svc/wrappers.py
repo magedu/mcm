@@ -22,8 +22,11 @@ class Filterable(QueryServiceMixIn):  # 不可变对象
             FILTERS.reset(token)
 
     def get(self, identity=None):
-        self.service.set_filters(self.filters)
-        return self.service.get()
+        token = FILTERS.set(self.filters)
+        try:
+            return self.service.get(identity)
+        finally:
+            FILTERS.reset(token)
 
     def count(self):
         token = FILTERS.set(self.filters)

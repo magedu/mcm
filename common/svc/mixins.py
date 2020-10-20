@@ -95,6 +95,9 @@ class QueryServiceMixIn:  # 用于从API查询数据
 class SyncServiceMixIn(ModelServiceMixIn, QueryServiceMixIn, ABC):  # 从API查询数据， 保存到数据库
     batch_size = 20
 
+    def sync(self, model):
+        pass
+
     def sync_to_model(self):
         paginator = self.paginator(self.batch_size)
         for num in paginator.page_range:
