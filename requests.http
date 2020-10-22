@@ -1,0 +1,38 @@
+GET http://127.0.0.1:8000/network/api/vpc/
+Accept: application/json
+
+###
+POST http://127.0.0.1:8000/network/api/vpc/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "test5",
+  "cidr": "172.19.0.0/16",
+  "account": 1,
+  "region": 2,
+  "identity": null
+}
+
+###
+PUT http://127.0.0.1:8000/network/api/vpc/1/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "put test",
+  "cidr": "172.17.0.0/16",
+  "identity": "vpc-c1hqfwb0",
+  "deleted_version": 0,
+  "account": 1,
+  "region": 2
+}
+
+###
+PATCH http://127.0.0.1:8000/network/api/vpc/1/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "patch test"
+}

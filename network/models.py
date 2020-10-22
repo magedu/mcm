@@ -20,7 +20,7 @@ class VPC(SaveTaskMixin, BaseModel):
     region = models.ForeignKey(Region, on_delete=models.RESTRICT, null=False)
     name = models.CharField(max_length=64, null=False)
     cidr = models.CharField(max_length=64, null=False)
-    identity = models.CharField(max_length=64, null=True)
+    identity = models.CharField(max_length=64, null=True, default="")
     # deleted = models.BooleanField(default=False)
     deleted_version = models.IntegerField(default=0)
 

@@ -29,10 +29,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'grpc_framework',
+    'rest_framework',
     'django_celery_beat',
     'account.apps.AccountConfig',
     'common.apps.CommonConfig',
     'network.apps.NetworkConfig',
+    'helloworld.apps.HelloworldConfig',
     # 'network.apps.NetworkConfig',
     # 'vm.apps.VmConfig',
     'django.contrib.admin',

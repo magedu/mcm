@@ -2,6 +2,7 @@ from django.views import generic
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from rest_framework import viewsets, serializers
 from . import models
 from .svc import Services
 from .svc.impl.base import RegionService, ZoneService
@@ -176,3 +177,8 @@ class ToggleZoneAvailableView(generic.RedirectView):
             pass
 
         return super().get(request, *args, **kwargs)
+
+
+class ProviderListApiView(viewsets.ReadOnlyModelViewSet):
+    model = models.Provider
+
