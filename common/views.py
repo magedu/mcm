@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+from django.core.serializers import get_serializer
 from django.views import generic
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -6,6 +8,7 @@ from . import models
 from .svc import Services
 from .svc.impl.base import RegionService, ZoneService
 from .shortcuts import boolean
+from .serializers import RegionSerializer
 
 
 class CreateProviderAccountView(generic.CreateView):
@@ -132,6 +135,33 @@ class ListRegionView(generic.ListView):
         if kw:
             queryset = queryset.filter(Q(name__icontains=kw) | Q(display__icontains=kw))
         return queryset
+
+
+class ListRegionJsonView(generic.ListView):
+    model = models.Region
+    paginate_by = 10
+    extra_context = {'providers': models.Provider.objects.all()}
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+        provider = self.request.GET.get('provider', 0)
+        if provider:
+            self.extra_context['provider_filter_id'] = int(provider)
+            queryset = queryset.filter(provider__id=int(provider))
+        kw = self.request.GET.get('fl')
+        self.extra_context['fl'] = kw
+        if kw:
+            queryset = queryset.filter(Q(name__icontains=kw) | Q(display__icontains=kw))
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        # super(ListRegionJsonView, self).get(request, *args, **kwargs)
+        # context = self.get_context_data()
+        # for k, v in context.items():
+        #     print(k)
+        #     print(v)
+        serializer = RegionSerializer(self.get_queryset(), many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 
 class ToggleRegionAvailableView(generic.RedirectView):

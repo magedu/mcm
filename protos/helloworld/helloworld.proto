@@ -1,0 +1,34 @@
+syntax = "proto3"; // 声明 protobuf的版本 v3
+
+// 声明options 可选的
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.helloworld";
+option java_outer_classname = "HelloWorldProto";
+option objc_class_prefix = "HLW";
+
+package hellowold; // 声明包名
+
+import "test/test.proto";
+
+// 声明 service 和 message
+
+// service 声明的是服务 生成 xxx_pb2_grpc.py
+// The greeting service definition.
+service Greeter {
+    // Sends a greeting
+    // rpc 声明一个方法 参数和返回值必须是 message
+    rpc SayHello (HelloRequest) returns (HelloReply) {
+    }
+}
+
+// message 声明的是数据结构  生成 xxx_pb2.py
+// The request message containing the user's name.
+message HelloRequest {
+    string name = 1; // 1 是这个字段的标号
+}
+
+// The response message containing the greetings
+message HelloReply {
+    string message = 1;
+    test.Empty empty = 2;
+}

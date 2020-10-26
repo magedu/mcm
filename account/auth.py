@@ -1,9 +1,15 @@
 import logging
+import jwt
+from django.conf import settings
+from django.http import HttpRequest
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.models import User, Group
 from ldap3 import Server, Connection, ALL_ATTRIBUTES
 from django.conf import settings
 from django.utils import timezone
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.exceptions import AuthenticationFailed
+from .models import Token
 
 logger = logging.getLogger('account.auth')
 
@@ -55,3 +61,34 @@ class LDAPBackend(BaseBackend):
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             logger.warning(f'user {user_id} not exist')
+
+
+class TokenAuthentication(BaseAuthentication):
+    def authenticate(self, request: HttpRequest):
+        header = request.headers.get('Authorization')
+        if not header:
+            raise AuthenticationFailed()
+        arr = header.split()
+        if arr.pop(0).lower() == 'token' and arr:
+            key = arr.pop(0)
+            # 后端存储
+            # try:
+            #     token = Token.objects.get(key=key)
+            #     now = timezone.now()
+            #     if (now - token.created).total_seconds() > 8 * 3600:
+            #         raise AuthenticationFailed("")
+            #     return token.user, token
+            # except Token.DoesNotExist:
+            #     raise AuthenticationFailed("")
+            # 前端存储
+            payload = jwt.decode(key, settings.SECRET_KEY, algorithms=['HS256'])
+            uid = payload.get('uid')
+            if uid:
+                # TODO exp
+                try:
+                    user = User.objects.get(pk=uid)
+                    return user, key
+                except User.DoesNotExist:
+                    raise AuthenticationFailed()
+
+        raise AuthenticationFailed()

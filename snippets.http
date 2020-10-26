@@ -1,0 +1,86 @@
+GET http://127.0.0.1:8000/snippets/snippets/
+Accept: application/json
+
+###
+POST http://127.0.0.1:8000/snippets/snippets/
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic admin 123456
+
+{
+  "code": "a = 1\n"
+}
+
+###
+POST http://127.0.0.1:8000/snippets/snippets/
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic comynli 123456
+
+{
+  "title": "test",
+  "code": "a = 1\n"
+}
+
+###
+GET http://127.0.0.1:8000/snippets/snippets/1/
+Accept: application/json
+
+###
+PUT http://127.0.0.1:8000/snippets/snippets/1/
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic admin 123456
+
+{
+  "code": "a = 3 \n"
+}
+
+###
+PUT http://127.0.0.1:8000/snippets/snippets/1/
+Accept: application/json
+Content-Type: application/json
+Authorization: Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIsImV4cCI6MTYwMzU1MTcxMy42ODI2MzF9.MEEbJJg7wDysiTHqQC-pw7iwAV7GvmRb7iKcBGd5aFw
+
+{
+  "code": "a = 5 \n"
+}
+
+###
+DELETE http://127.0.0.1:8000/snippets/snippets/1/
+Accept: application/json
+
+###
+POST http://127.0.0.1:8000/account/api/signin/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+GET http://127.0.0.1:8000/snippets/users/
+Accept: application/json
+
+###
+GET http://127.0.0.1:8000/snippets/users/1/
+Accept: application/json
+
+###
+POST http://127.0.0.1:8000/snippets/users/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "test"
+}
+
+###
+GET http://127.0.0.1:8000/snippets/snippets/13/highlight/
+Accept: application/json
+
+###
+GET http://127.0.0.1:8000/snippets/snippets/abc/
+Accept: application/json

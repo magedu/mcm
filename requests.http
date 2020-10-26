@@ -1,0 +1,41 @@
+GET http://127.0.0.1:8000/quickstart/api/user/
+Accept: application/json
+
+###
+GET http://127.0.0.1:8000/quickstart/api/user/1/
+Accept: application/json
+
+###
+POST http://127.0.0.1:8000/quickstart/api/user/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "testuser@magedu.com",
+  "groups": []
+}
+
+###
+PUT http://127.0.0.1:8000/quickstart/api/user/3/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "test_user",
+  "email": "test_user@magedu.com",
+  "groups": []
+}
+
+###
+PATCH http://127.0.0.1:8000/quickstart/api/user/3/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "user_test"
+}
+
+###
+DELETE http://127.0.0.1:8000/quickstart/api/user/3/
+Accept: application/json

@@ -11,6 +11,7 @@ urlpatterns = [
     path('account/add/', views.CreateProviderAccountView.as_view(), name='provider-account-create'),
     path('account/<int:pk>', views.UpdateProviderAccountView.as_view(), name='provider-account-update'),
     path('region', views.ListRegionView.as_view(), name='region-list'),
+    path('region.json', views.ListRegionJsonView.as_view(), name='region-list-json'),
     path('region/<int:pk>/toggle', views.ToggleRegionAvailableView.as_view(), name='region-toggle'),
     path('zone', views.ListZoneView.as_view(), name='zone-list'),
     path('zone/<int:pk>/toggle', views.ToggleZoneAvailableView.as_view(), name='zone-toggle'),

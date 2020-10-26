@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,10 +30,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'django_celery_beat',
+    'grpc_framework',
     'account.apps.AccountConfig',
     'common.apps.CommonConfig',
     'network.apps.NetworkConfig',
+    'quickstart.apps.QuickstartConfig',
+    'snippets.apps.SnippetsConfig',
+    'helloworld.apps.HelloworldConfig',
     # 'network.apps.NetworkConfig',
     # 'vm.apps.VmConfig',
     'django.contrib.admin',
@@ -143,3 +149,29 @@ AUTHENTICATION_BACKENDS = ['account.auth.LDAPBackend', 'django.contrib.auth.back
 
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/2'
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'
+
+if DEBUG:
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework.authentication.BasicAuthentication',
+            'rest_framework.authentication.SessionAuthentication',
+            # 'account.auth.TokenAuthentication'
+        ],
+        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': 10
+    }
+else:
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+            # 'rest_framework.authentication.BasicAuthentication',
+            'rest_framework.authentication.SessionAuthentication',
+            'account.auth.TokenAuthentication'
+        ]
+    }
+
+GRPC_FRAMEWORK = {
+    'PROTOBUF_DIR': 'protos',
+    'TMP_DIR': '.generated',
+    'BIND': '127.0.0.1:5051',
+    'MAX_WORKERS': os.cpu_count()
+}
